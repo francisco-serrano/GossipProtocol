@@ -346,15 +346,14 @@ void MP1Node::updateSrcMember(MessageHdr *msgReceived) {
  * 				Propagate your membership list
  */
 void MP1Node::nodeLoopOps() {
-
     memberNode->heartbeat++;
 
-    for (unsigned long i = memberNode->memberList.size() - 1; i >= 0; i--) {
+    for (int i = memberNode->memberList.size() - 1; i >= 0; i--) {
         if (par->getcurrtime() - memberNode->memberList[i].timestamp >= TREMOVE) {
             Address *removedAddress = getAddress(memberNode->memberList[i].id, memberNode->memberList[i].port);
             log->logNodeRemove(&memberNode->addr, removedAddress);
             memberNode->memberList.erase(memberNode->memberList.begin() + i);
-            
+
             delete removedAddress;
         }
     }
