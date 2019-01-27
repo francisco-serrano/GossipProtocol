@@ -1,4 +1,4 @@
-# MembershipProtocol
+# GossipProtocol
 
 Programming Assignment for Cloud Computing Concepts, Part 1 (Coursera)
 
