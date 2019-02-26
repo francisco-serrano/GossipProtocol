@@ -1,3 +1,3 @@
-/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/cmake-build-debug/CMakeFiles/mp1.dir
-/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/cmake-build-debug/CMakeFiles/edit_cache.dir
+/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/cmake-build-debug/CMakeFiles/mp1.dir
+/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/cmake-build-debug/CMakeFiles/edit_cache.dir

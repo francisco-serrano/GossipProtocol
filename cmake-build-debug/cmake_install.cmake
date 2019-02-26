@@ -1,4 +1,4 @@
-# Install script for directory: /cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1
+# Install script for directory: /cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

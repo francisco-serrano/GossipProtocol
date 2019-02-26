@@ -8,28 +8,28 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/cmake-build-debug"/>
+				<Option working_dir="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/cmake-build-debug"/>
+				<Option working_dir="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="mp1">
-				<Option output="/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/cmake-build-debug/mp1.exe" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/cmake-build-debug"/>
+				<Option output="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/cmake-build-debug/mp1.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -42,15 +42,15 @@
 					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/7.3.0/../../../../lib/../include/w32api"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 mp1"/>
-					<CompileFile command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 mp1"/>
+					<CompileFile command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="mp1/fast">
-				<Option output="/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/cmake-build-debug/mp1.exe" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/cmake-build-debug"/>
+				<Option output="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/cmake-build-debug/mp1.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -63,66 +63,66 @@
 					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/7.3.0/../../../../lib/../include/w32api"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 mp1/fast"/>
-					<CompileFile command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 mp1/fast"/>
+					<CompileFile command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/cmake-build-debug"/>
+				<Option working_dir="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/cygwin64/bin/make.exe -j4 -f &quot;/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud\ Computing/1.\ Cloud\ Computing\ Concepts,\ Part\ 1/Assignments/mp1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Application.cpp">
+		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Application.cpp">
 			<Option target="mp1"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Application.h">
+		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Application.h">
 			<Option target="mp1"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/EmulNet.cpp">
+		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/EmulNet.cpp">
 			<Option target="mp1"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/EmulNet.h">
+		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/EmulNet.h">
 			<Option target="mp1"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Log.cpp">
+		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Log.cpp">
 			<Option target="mp1"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Log.h">
+		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Log.h">
 			<Option target="mp1"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/MP1Node.cpp">
+		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/MP1Node.cpp">
 			<Option target="mp1"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/MP1Node.h">
+		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/MP1Node.h">
 			<Option target="mp1"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Member.cpp">
+		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Member.cpp">
 			<Option target="mp1"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Member.h">
+		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Member.h">
 			<Option target="mp1"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Params.cpp">
+		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Params.cpp">
 			<Option target="mp1"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Params.h">
+		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Params.h">
 			<Option target="mp1"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Queue.h">
+		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Queue.h">
 			<Option target="mp1"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/stdincludes.h">
+		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/stdincludes.h">
 			<Option target="mp1"/>
 		</Unit>
-		<Unit filename="/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/CMakeLists.txt">
+		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>
