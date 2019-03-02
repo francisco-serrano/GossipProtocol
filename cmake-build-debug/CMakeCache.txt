@@ -324,7 +324,7 @@ CMAKE_GENERATOR_PLATFORM:INTERNAL=
 CMAKE_GENERATOR_TOOLSET:INTERNAL=
 //Source directory with the top level CMakeLists.txt file for this
 // project
-CMAKE_HOME_DIRECTORY:INTERNAL=/cygdrive/c/Users/Francisco/Documents/Cursos/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1
+CMAKE_HOME_DIRECTORY:INTERNAL=/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1
 //ADVANCED property for variable: CMAKE_LINKER
 CMAKE_LINKER-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_MODULE_LINKER_FLAGS

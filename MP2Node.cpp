@@ -45,6 +45,7 @@ void MP2Node::updateRing() {
 	 *  Step 1. Get the current membership list from Membership Protocol / MP1
 	 */
 	curMemList = getMembershipList();
+	curMemList.push_back(Node(this->memberNode->addr));
 
 	/*
 	 * Step 2: Construct the ring
@@ -52,12 +53,15 @@ void MP2Node::updateRing() {
 	// Sort the list based on the hashCode
 	sort(curMemList.begin(), curMemList.end());
 
-
 	/*
 	 * Step 3: Run the stabilization protocol IF REQUIRED
 	 */
 	// Run stabilization protocol if the hash table size is greater than zero and if there has been a changed in the ring
-	this->stabilizationProtocol();
+	change = curMemList.size() != this->ring.size();
+    this->ring = curMemList;
+
+	if (this->ht->currentSize() > 0 && change)
+	    this->stabilizationProtocol();
 }
 
 /**
@@ -115,21 +119,28 @@ void MP2Node::clientCreate(string key, string value) {
 //	printf("clientCreate: KEY: %s - VALUE: %s\n", key.c_str(), value.c_str());
 
 	// Create elements that compose the message to send
-	int transactionId = 0;
+	int transactionId = g_transID++;
+
 	Address address = this->memberNode->addr;
-	MessageType msgType = MessageType::CREATE;
+    MessageType msgType = MessageType::CREATE;
 
 	// 1. Message Construction
 	Message *msg = new Message(transactionId, address, msgType, key, value);
+	string msgData = msg->toString();
 
-	// 2. Find Replicas
-	vector<Node> replicas = this->findNodes(key);
+    // 2. Find Replicas
+    vector<Node> replicas = this->findNodes(key);
 
-	// 3. Send message to replicas
+    // 3. Send message to replicas
 	for (auto &replica : replicas) {
 	    Address *fromAddress = &address;
 	    Address *toAddress = replica.getAddress();
-	    string msgData = msg->toString();
+
+//        printf("from: %s - to: %s - msgData: %s\n",
+//                this->memberNode->addr.getAddress().c_str(),
+//                replica.getAddress()->getAddress().c_str(),
+//                msgData.c_str()
+//                );
 
 	    this->emulNet->ENsend(fromAddress, toAddress, msgData);
 	}
@@ -193,7 +204,11 @@ bool MP2Node::createKeyValue(string key, string value, ReplicaType replica) {
 	 * Implement this
 	 */
 	// Insert key, value, replicaType into the hash table
-	return this->ht->create(key, value);
+
+//    bool existsValue = this->ht->read(key) != "";
+
+    bool success = this->ht->create(key, value);
+    return success;
 }
 
 /**
@@ -275,7 +290,36 @@ void MP2Node::checkMessages() {
 		 * Handle the message types here
 		 */
 
-	}
+        Message *msg = new Message(message);
+
+        if (msg->type == MessageType::CREATE) {
+            this->createKeyValue(msg->key, msg->value, msg->replica);
+            Message *replyMsg = new Message(msg->transID, msg->fromAddr, MessageType::REPLY, msg->key);
+
+            this->emulNet->ENsend(&this->memberNode->addr, &msg->fromAddr, replyMsg->toString());
+        }
+
+        if (msg->type == MessageType::READ) {
+
+        }
+
+        if (msg->type == MessageType::UPDATE) {
+
+        }
+
+        if (msg->type == MessageType::DELETE) {
+
+        }
+
+        if (msg->type == MessageType::REPLY) {
+
+        }
+
+        if (msg->type == MessageType::READREPLY) {
+
+        }
+
+    }
 
 	/*
 	 * This function should also ensure all READ and UPDATE operation
@@ -351,8 +395,25 @@ void MP2Node::stabilizationProtocol() {
 	/*
 	 * Implement this
 	 */
-	for (auto const& keyValuePair : this->ht->hashTable) {
-	    printf("stabilizationProtocol: KEY: %s - VALUE: %s", keyValuePair.first.c_str(), keyValuePair.second.c_str());
+	for (auto keyValuePair : this->ht->hashTable) {
+//	    printf("stabilizationProtocol: KEY: %s - VALUE: %s\n", keyValuePair.first.c_str(), keyValuePair.second.c_str());
+
+	    string key = keyValuePair.first;
+	    string value = keyValuePair.second;
+
+	    vector<Node> replicas = this->findNodes(key);
+
+	    for (auto &replica : replicas) {
+	        int transactionId = -1;
+	        Address fromAddress = this->memberNode->addr;
+	        Address *toAddress = replica.getAddress();
+	        MessageType msgType = MessageType::CREATE;
+
+	        Message *msg = new Message(transactionId, fromAddress, msgType, key, value);
+	        string msgData = msg->toString();
+
+	        this->emulNet->ENsend(&fromAddress, toAddress, msgData);
+	    }
 	}
 
 }

@@ -92,6 +92,18 @@
 		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/EmulNet.h">
 			<Option target="mp1"/>
 		</Unit>
+		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Entry.cpp">
+			<Option target="mp1"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Entry.h">
+			<Option target="mp1"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/HashTable.cpp">
+			<Option target="mp1"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/HashTable.h">
+			<Option target="mp1"/>
+		</Unit>
 		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Log.cpp">
 			<Option target="mp1"/>
 		</Unit>
@@ -104,10 +116,28 @@
 		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/MP1Node.h">
 			<Option target="mp1"/>
 		</Unit>
+		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/MP2Node.cpp">
+			<Option target="mp1"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/MP2Node.h">
+			<Option target="mp1"/>
+		</Unit>
 		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Member.cpp">
 			<Option target="mp1"/>
 		</Unit>
 		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Member.h">
+			<Option target="mp1"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Message.cpp">
+			<Option target="mp1"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Message.h">
+			<Option target="mp1"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Node.cpp">
+			<Option target="mp1"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Node.h">
 			<Option target="mp1"/>
 		</Unit>
 		<Unit filename="/cygdrive/c/Users/Francisco/Documents/CURSOS/Coursera/Cloud Computing/1. Cloud Computing Concepts, Part 1/Assignments/mp1/Params.cpp">
