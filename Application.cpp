@@ -31,11 +31,12 @@ int main(int argc, char *argv[]) {
 		return FAILURE;
 	}
 
-	// Create a new application object
+    // Create a new application object
 	Application *app = new Application(argv[1]);
 	// Call the run function
 	app->run();
-	// When done delete the application object
+
+    // When done delete the application object
 	delete(app);
 
 	return SUCCESS;
@@ -65,9 +66,9 @@ Application::Application(char *infile) {
 		Address joinaddr;
 		joinaddr = getjoinaddr();
 		addressOfMemberNode = (Address *) en->ENinit(addressOfMemberNode, par->PORTNUM);
-		mp1[i] = new MP1Node(memberNode, par, en, log, addressOfMemberNode);
-		mp2[i] = new MP2Node(memberNode, par, en1, log, addressOfMemberNode);
-		log->LOG(&(mp1[i]->getMemberNode()->addr), "APP");
+        mp1[i] = new MP1Node(memberNode, par, en, log, addressOfMemberNode);
+        mp2[i] = new MP2Node(memberNode, par, en1, log, addressOfMemberNode);
+        log->LOG(&(mp1[i]->getMemberNode()->addr), "APP");
 		log->LOG(&(mp2[i]->getMemberNode()->addr), "APP MP2");
 		delete addressOfMemberNode;
 	}
@@ -77,10 +78,10 @@ Application::Application(char *infile) {
  * Destructor
  */
 Application::~Application() {
-	delete log;
-	delete en;
-	delete en1;
-	for ( int i = 0; i < par->EN_GPSZ; i++ ) {
+    delete log;
+    delete en;
+    delete en1;
+    for ( int i = 0; i < par->EN_GPSZ; i++ ) {
 		delete mp1[i];
 		delete mp2[i];
 	}
@@ -118,9 +119,9 @@ int Application::run()
 		}
 		// Fail some nodes
 		//fail();
-	}
+    }
 
-	// Clean up
+    // Clean up
 	en->ENcleanup();
 	en1->ENcleanup();
 
@@ -207,16 +208,17 @@ void Application::mp2Run() {
 			// Step 2
 			mp2[i]->recvLoop();
 		}
-	}
+    }
 
 	/**
 	 * Handle messages from the queue and update the DHT
 	 */
 	for ( i = par->EN_GPSZ-1; i >= 0; i-- ) {
-		if ( par->getcurrtime() > (int)(par->STEP_RATE*i) && !mp2[i]->getMemberNode()->bFailed ) {
-			mp2[i]->checkMessages();
-		}
-	}
+        if ( par->getcurrtime() > (int)(par->STEP_RATE*i) && !mp2[i]->getMemberNode()->bFailed ) {
+            mp2[i]->checkMessages();
+        }
+
+    }
 
 	/**
 	 * Insert a set of test key value pairs into the system

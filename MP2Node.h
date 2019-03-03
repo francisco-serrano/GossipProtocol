@@ -19,6 +19,20 @@
 #include "Message.h"
 #include "Queue.h"
 
+class Transaction {
+private:
+	int id;
+	int timestamp;
+public:
+    Transaction(int id, int timestamp, MessageType msgType, string key, string value);
+    MessageType msgType;
+    string key;
+    string value;
+    int replyCount;
+    int successCount;
+	int getTime(){ return timestamp;};
+};
+
 /**
  * CLASS NAME: MP2Node
  *
@@ -47,6 +61,8 @@ private:
 	EmulNet * emulNet;
 	// Object of Log
 	Log * log;
+	// Transactions Map
+	map<int, Transaction*> *transactionsMap;
 
 public:
 	MP2Node(Member *memberNode, Params *par, EmulNet *emulNet, Log *log, Address *addressOfMember);
@@ -80,13 +96,16 @@ public:
 	vector<Node> findNodes(string key);
 
 	// server
-	bool createKeyValue(string key, string value, ReplicaType replica);
+	bool createKeyValue(string key, string value, ReplicaType replica, int transId);
 	string readKey(string key);
 	bool updateKeyValue(string key, string value, ReplicaType replica);
 	bool deletekey(string key);
 
 	// stabilization protocol - handle multiple failures
 	void stabilizationProtocol();
+
+	// extra operations
+    void logOperation(Transaction *t, bool isCoordinator, bool success, int transID);
 
 	~MP2Node();
 };
