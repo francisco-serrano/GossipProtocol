@@ -30,7 +30,8 @@ public:
     string value;
     int replyCount;
     int successCount;
-	int getTime(){ return timestamp;};
+    int getId() {return id;};
+    int getTime(){ return timestamp;};
 };
 
 /**
@@ -104,8 +105,21 @@ public:
 	// stabilization protocol - handle multiple failures
 	void stabilizationProtocol();
 
-	// extra operations
-    void logOperation(Transaction *t, bool isCoordinator, bool success, int transID);
+	// user-defined functions
+    void handleMessage(Message *msgReceived);
+    void handleCreateMessage(Message *msgReceived);
+    void handleReadMessage(Message *msgReceived);
+    void handleUpdateMessage(Message *msgReceived);
+    void handleDeleteMessage(Message *msgReceived);
+    void handleReplyMessage(Message *msgReceived);
+    void handleReadReplyMessage(Message *msgReceived);
+    void analyzeQuorumConsistency();
+    void logOperationCoordinator(Transaction *transaction, bool operationSuccess);
+    void logCreate(Transaction *transaction, bool isCoordinator, bool createOperationSuccess);
+    void logRead(Transaction *transaction, bool isCoordinator, bool readOperationSuccess);
+    void logUpdate(Transaction *transaction, bool isCoordinator, bool updateOperationSuccess);
+    void logDelete(Transaction *transaction, bool isCoordinator, bool deleteOperationSuccess);
+    void deleteTransaction(map<int, Transaction*>::iterator transactionIterator);
 
 	~MP2Node();
 };

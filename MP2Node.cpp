@@ -125,7 +125,6 @@ void MP2Node::clientCreate(string key, string value) {
     /*
      * Implement this
      */
-//	printf("clientCreate: KEY: %s - VALUE: %s\n", key.c_str(), value.c_str());
 
     // Create elements that compose the message to send and the transaction
     int transactionId = g_transID++;
@@ -211,14 +210,14 @@ bool MP2Node::createKeyValue(string key, string value, ReplicaType replica, int 
      * Implement this
      */
     // Insert key, value, replicaType into the hash table
-    bool success = this->ht->create(key, value);
+    bool createSuccess = this->ht->create(key, value);
 
-    if (success)
+    if (createSuccess)
         this->log->logCreateSuccess(&this->memberNode->addr, false, transId, key, value);
     else
         this->log->logCreateFail(&this->memberNode->addr, false, transId, key, value);
 
-    return success;
+    return createSuccess;
 }
 
 /**
@@ -294,99 +293,193 @@ void MP2Node::checkMessages() {
         size = memberNode->mp2q.front().size;
         memberNode->mp2q.pop();
 
-        string message(data, data + size);
+        string messageString(data, data + size);
 
         /*
          * Handle the message types here
          */
-        Message *msg = new Message(message);
+        this->handleMessage(new Message(messageString));
+    }
 
-        switch (msg->type) {
-            case MessageType::CREATE: {
-                bool createSuccess = this->createKeyValue(msg->key, msg->value, msg->replica, msg->transID);
-                auto *replyMsg = new Message(msg->transID, this->memberNode->addr, MessageType::REPLY, createSuccess);
-                this->emulNet->ENsend(&this->memberNode->addr, &msg->fromAddr, replyMsg->toString());
+    /*
+     * This function should also ensure all READ and UPDATE operation
+     * get QUORUM replies
+     */
+    this->analyzeQuorumConsistency();
+}
 
-                break;
-            }
+void MP2Node::handleMessage(Message *msgReceived) {
+    if (msgReceived->type == MessageType::CREATE)
+        this->handleCreateMessage(msgReceived);
 
-            case MessageType::REPLY: {
-                auto it = this->transactionsMap->find(msg->transID);
+    if (msgReceived->type == MessageType::READ)
+        this->handleReadMessage(msgReceived);
 
-                if (it == this->transactionsMap->end())
-                    break;
+    if (msgReceived->type == MessageType::UPDATE)
+        this->handleUpdateMessage(msgReceived);
 
-                Transaction *transaction = (*transactionsMap)[msg->transID];
-                transaction->replyCount++;
+    if (msgReceived->type == MessageType::DELETE)
+        this->handleDeleteMessage(msgReceived);
 
-                if (msg->success)
-                    transaction->successCount++;
+    if (msgReceived->type == MessageType::REPLY)
+        this->handleReplyMessage(msgReceived);
 
-                break;
-            }
+    if (msgReceived->type == MessageType::READREPLY)
+        this->handleReadReplyMessage(msgReceived);
+}
+
+void MP2Node::handleCreateMessage(Message *msgReceived) {
+    bool createSuccess = this->createKeyValue(msgReceived->key, msgReceived->value, msgReceived->replica, msgReceived->transID);
+    auto *replyMsg = new Message(msgReceived->transID, this->memberNode->addr, MessageType::REPLY, createSuccess);
+    this->emulNet->ENsend(&this->memberNode->addr, &msgReceived->fromAddr, replyMsg->toString());
+}
+
+void MP2Node::handleReadMessage(Message *msgReceived) {
+    bool readSuccess = !this->readKey(msgReceived->key).empty();
+    auto *replyMsg = new Message(msgReceived->transID, this->memberNode->addr, MessageType::READREPLY, readSuccess);
+    this->emulNet->ENsend(&this->memberNode->addr, &msgReceived->fromAddr, replyMsg->toString());
+}
+
+void MP2Node::handleUpdateMessage(Message *msgReceived) {
+    bool updateSuccess = this->updateKeyValue(msgReceived->key, msgReceived->value, msgReceived->replica);
+    auto *replyMsg = new Message(msgReceived->transID, this->memberNode->addr, MessageType::READREPLY, updateSuccess);
+    this->emulNet->ENsend(&this->memberNode->addr, &msgReceived->fromAddr, replyMsg->toString());
+}
+
+void MP2Node::handleDeleteMessage(Message *msgReceived) {
+    bool deleteSuccess = this->deletekey(msgReceived->key);
+    auto *replyMsg = new Message(msgReceived->transID, this->memberNode->addr, MessageType::READREPLY, deleteSuccess);
+    this->emulNet->ENsend(&this->memberNode->addr, &msgReceived->fromAddr, replyMsg->toString());
+}
+
+void MP2Node::handleReplyMessage(Message *msgReceived) {
+    if (this->transactionsMap->find(msgReceived->transID) == this->transactionsMap->end())
+        return;
+
+    Transaction *transaction = (*transactionsMap)[msgReceived->transID];
+    transaction->replyCount++;
+
+    if (msgReceived->success)
+        transaction->successCount++;
+}
+
+void MP2Node::handleReadReplyMessage(Message *msgReceived) {
+    if (this->transactionsMap->find(msgReceived->transID) == this->transactionsMap->end())
+        return;
+
+    Transaction *transaction = (*transactionsMap)[msgReceived->transID];
+    transaction->replyCount++;
+    transaction->value = msgReceived->value;
+
+    if (msgReceived->success)
+        transaction->successCount++;
+}
+
+
+void MP2Node::analyzeQuorumConsistency() {
+
+    for (auto transactionIterator = this->transactionsMap->begin();
+         transactionIterator != this->transactionsMap->end();
+         transactionIterator++) {
+        Transaction *transaction = transactionIterator->second;
+
+        // Values to analyze consistency
+        int transactionReplyCount = transaction->replyCount;
+        int transactionSuccessCount = transaction->successCount;
+        int transactionTimestamp = transaction->getTime();
+        int currentTimestamp = this->par->getcurrtime();
+
+        // Consistency Analysis
+        if (transactionReplyCount == 3 && transactionSuccessCount > 1) {
+            this->logOperationCoordinator(transaction, true);
+            this->deleteTransaction(transactionIterator);
+            continue;
         }
 
-        /*
-         * This function should also ensure all READ and UPDATE operation
-         * get QUORUM replies
-         */
-        auto it = transactionsMap->begin();
-        while (it != transactionsMap->end()) {
-            cout << "transaccion -> " << it->first << endl;
-            if (it->second->replyCount == 3) {
-                if (it->second->successCount >= 2) {
-                    logOperation(it->second, true, true, it->first);
-                } else {
-                    logOperation(it->second, true, false, it->first);
-                }
-                delete it->second;
-                it = transactionsMap->erase(it);
-                continue;
-            } else {
-                if (it->second->successCount == 2) {
-                    logOperation(it->second, true, true, it->first);
-                    delete it->second;
-                    it = transactionsMap->erase(it);
-                    continue;
-                }
-
-                if (it->second->replyCount - it->second->successCount == 2) {
-                    logOperation(it->second, true, false, it->first);
-                    delete it->second;
-                    it = transactionsMap->erase(it);
-                    continue;
-                }
-            }
-
-            // time limit
-            if (this->par->getcurrtime() - it->second->getTime() > 10) {
-                logOperation(it->second, true, false, it->first);
-                delete it->second;
-                it = transactionsMap->erase(it);
-                continue;
-            }
-
-            it++;
-
-
+        if (transactionReplyCount != 3 && transactionSuccessCount == 2) {
+            this->logOperationCoordinator(transaction, true);
+            this->deleteTransaction(transactionIterator);
+            continue;
         }
 
+        if (transactionReplyCount == 3 && transactionSuccessCount < 2) {
+            this->logOperationCoordinator(transaction, false);
+            this->deleteTransaction(transactionIterator);
+            continue;
+        }
+
+        if (transactionReplyCount - transactionSuccessCount == 2) {
+            this->logOperationCoordinator(transaction, false);
+            this->deleteTransaction(transactionIterator);
+            continue;
+        }
+
+        if (currentTimestamp - transactionTimestamp > 10) {
+            this->logOperationCoordinator(transaction, false);
+            this->deleteTransaction(transactionIterator);
+            continue;
+        }
     }
 }
 
-void MP2Node::logOperation(Transaction *transaction, bool isCoordinator, bool success, int transID) {
-    switch (transaction->msgType) {
-        case CREATE: {
-            if (success) {
-                log->logCreateSuccess(&this->memberNode->addr, isCoordinator, transID, transaction->key,
-                                      transaction->value);
-            } else {
-                log->logCreateFail(&this->memberNode->addr, isCoordinator, transID, transaction->key,
-                                   transaction->value);
-            }
-            break;
-        }
+void MP2Node::logOperationCoordinator(Transaction *transaction, bool operationSuccess) {
+    if (transaction->msgType == MessageType::CREATE)
+        this->logCreate(transaction, true, operationSuccess);
+
+    if (transaction->msgType == MessageType::READ)
+        this->logRead(transaction, true, operationSuccess);
+
+    if (transaction->msgType == MessageType::UPDATE)
+        this->logUpdate(transaction, true, operationSuccess);
+
+    if (transaction->msgType == MessageType::DELETE)
+        this->logDelete(transaction, true, operationSuccess);
+}
+
+void MP2Node::logCreate(Transaction *transaction, bool isCoordinator, bool createOperationSuccess) {
+    if (createOperationSuccess) {
+        this->log->logCreateSuccess(&this->memberNode->addr, isCoordinator, transaction->getId(), transaction->key,
+                                    transaction->value);
+        return;
     }
+
+    this->log->logCreateFail(&this->memberNode->addr, isCoordinator, transaction->getId(), transaction->key,
+                             transaction->value);
+}
+
+void MP2Node::logRead(Transaction *transaction, bool isCoordinator, bool readOperationSuccess) {
+    if (readOperationSuccess) {
+        this->log->logReadSuccess(&this->memberNode->addr, isCoordinator, transaction->getId(), transaction->key,
+                                  transaction->value);
+        return;
+    }
+
+    this->log->logReadFail(&this->memberNode->addr, isCoordinator, transaction->getId(), transaction->key);
+}
+
+void MP2Node::logUpdate(Transaction *transaction, bool isCoordinator, bool updateOperationSuccess) {
+    if (updateOperationSuccess) {
+        this->log->logUpdateSuccess(&this->memberNode->addr, isCoordinator, transaction->getId(), transaction->key,
+                                    transaction->value);
+        return;
+    }
+
+    this->log->logUpdateFail(&this->memberNode->addr, isCoordinator, transaction->getId(), transaction->key,
+                             transaction->value);
+}
+
+void MP2Node::logDelete(Transaction *transaction, bool isCoordinator, bool deleteOperationSuccess) {
+    if (deleteOperationSuccess) {
+        this->log->logDeleteSuccess(&this->memberNode->addr, isCoordinator, transaction->getId(), transaction->key);
+        return;
+    }
+
+    this->log->logDeleteFail(&this->memberNode->addr, isCoordinator, transaction->getId(), transaction->key);
+}
+
+void MP2Node::deleteTransaction(map<int, Transaction *>::iterator transactionIterator) {
+    delete transactionIterator->second;
+    this->transactionsMap->erase(transactionIterator);
 }
 
 /**
@@ -457,8 +550,6 @@ void MP2Node::stabilizationProtocol() {
      * Implement this
      */
     for (const auto &keyValuePair : this->ht->hashTable) {
-//	    printf("stabilizationProtocol: KEY: %s - VALUE: %s\n", keyValuePair.first.c_str(), keyValuePair.second.c_str());
-
         string key = keyValuePair.first;
         string value = keyValuePair.second;
 
