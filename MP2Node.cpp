@@ -165,6 +165,30 @@ void MP2Node::clientRead(string key) {
     /*
      * Implement this
      */
+    // Create elements that compose the message to send and the transaction
+    int transactionId = g_transID++;
+    Address address = this->memberNode->addr;
+    MessageType msgType = MessageType::READ;
+
+    // 1. Message Construction
+    Message *msg = new Message(transactionId, address, msgType, key);
+    string msgData = msg->toString();
+
+    // 2. Find Replicas
+    vector<Node> replicas = this->findNodes(key);
+
+    // 3. Send message to replicas
+    for (auto &replica : replicas) {
+        int currentTimestamp = this->par->getcurrtime();
+
+        Transaction *transaction = new Transaction(transactionId, currentTimestamp, msgType, key);
+        this->transactionsMap->emplace(transactionId, transaction);
+
+        Address *fromAddress = &address;
+        Address *toAddress = replica.getAddress();
+
+        this->emulNet->ENsend(fromAddress, toAddress, msgData);
+    }
 }
 
 /**
@@ -228,11 +252,20 @@ bool MP2Node::createKeyValue(string key, string value, ReplicaType replica, int 
  * 			    1) Read key from local hash table
  * 			    2) Return value
  */
-string MP2Node::readKey(string key) {
+string MP2Node::readKey(string key, int transId) {
     /*
      * Implement this
      */
     // Read key from local hash table and return value
+    string value = this->ht->read(key);
+    bool readSuccess = !value.empty();
+
+    if (readSuccess)
+        this->log->logReadSuccess(&this->memberNode->addr, false, transId, key, value);
+    else
+        this->log->logReadFail(&this->memberNode->addr, false, transId, key);
+
+    return value;
 }
 
 /**
@@ -243,7 +276,7 @@ string MP2Node::readKey(string key) {
  * 				1) Update the key to the new value in the local hash table
  * 				2) Return true or false based on success or failure
  */
-bool MP2Node::updateKeyValue(string key, string value, ReplicaType replica) {
+bool MP2Node::updateKeyValue(string key, string value, ReplicaType replica, int transId) {
     /*
      * Implement this
      */
@@ -258,7 +291,7 @@ bool MP2Node::updateKeyValue(string key, string value, ReplicaType replica) {
  * 				1) Delete the key from the local hash table
  * 				2) Return true or false based on success or failure
  */
-bool MP2Node::deletekey(string key) {
+bool MP2Node::deletekey(string key, int transId) {
     /*
      * Implement this
      */
@@ -335,19 +368,19 @@ void MP2Node::handleCreateMessage(Message *msgReceived) {
 }
 
 void MP2Node::handleReadMessage(Message *msgReceived) {
-    bool readSuccess = !this->readKey(msgReceived->key).empty();
+    bool readSuccess = !this->readKey(msgReceived->key, msgReceived->transID).empty();
     auto *replyMsg = new Message(msgReceived->transID, this->memberNode->addr, MessageType::READREPLY, readSuccess);
     this->emulNet->ENsend(&this->memberNode->addr, &msgReceived->fromAddr, replyMsg->toString());
 }
 
 void MP2Node::handleUpdateMessage(Message *msgReceived) {
-    bool updateSuccess = this->updateKeyValue(msgReceived->key, msgReceived->value, msgReceived->replica);
+    bool updateSuccess = this->updateKeyValue(msgReceived->key, msgReceived->value, msgReceived->replica, msgReceived->transID);
     auto *replyMsg = new Message(msgReceived->transID, this->memberNode->addr, MessageType::READREPLY, updateSuccess);
     this->emulNet->ENsend(&this->memberNode->addr, &msgReceived->fromAddr, replyMsg->toString());
 }
 
 void MP2Node::handleDeleteMessage(Message *msgReceived) {
-    bool deleteSuccess = this->deletekey(msgReceived->key);
+    bool deleteSuccess = this->deletekey(msgReceived->key, msgReceived->transID);
     auto *replyMsg = new Message(msgReceived->transID, this->memberNode->addr, MessageType::READREPLY, deleteSuccess);
     this->emulNet->ENsend(&this->memberNode->addr, &msgReceived->fromAddr, replyMsg->toString());
 }

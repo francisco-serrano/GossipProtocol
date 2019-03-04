@@ -24,7 +24,7 @@ private:
 	int id;
 	int timestamp;
 public:
-    Transaction(int id, int timestamp, MessageType msgType, string key, string value);
+    Transaction(int id, int timestamp, MessageType msgType, string key, string value="");
     MessageType msgType;
     string key;
     string value;
@@ -98,9 +98,9 @@ public:
 
 	// server
 	bool createKeyValue(string key, string value, ReplicaType replica, int transId);
-	string readKey(string key);
-	bool updateKeyValue(string key, string value, ReplicaType replica);
-	bool deletekey(string key);
+	string readKey(string key, int transId);
+	bool updateKeyValue(string key, string value, ReplicaType replica, int transId);
+	bool deletekey(string key, int transId);
 
 	// stabilization protocol - handle multiple failures
 	void stabilizationProtocol();
