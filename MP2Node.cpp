@@ -204,6 +204,30 @@ void MP2Node::clientUpdate(string key, string value) {
     /*
      * Implement this
      */
+    // Create elements that compose the message to send and the transaction
+    int transactionId = g_transID++;
+    Address address = this->memberNode->addr;
+    MessageType msgType = MessageType::UPDATE;
+
+    // 1. Message Construction
+    Message *msg = new Message(transactionId, address, msgType, key, value);
+    string msgData = msg->toString();
+
+    // 2. Find Replicas
+    vector<Node> replicas = this->findNodes(key);
+
+    // 3. Send message to replicas
+    for (auto &replica : replicas) {
+        int currentTimestamp = this->par->getcurrtime();
+
+        Transaction *transaction = new Transaction(transactionId, currentTimestamp, msgType, key, value);
+        this->transactionsMap->emplace(transactionId, transaction);
+
+        Address *fromAddress = &address;
+        Address *toAddress = replica.getAddress();
+
+        this->emulNet->ENsend(fromAddress, toAddress, msgData);
+    }
 }
 
 /**
@@ -281,6 +305,14 @@ bool MP2Node::updateKeyValue(string key, string value, ReplicaType replica, int 
      * Implement this
      */
     // Update key in local hash table and return true or false
+    bool updateSucess = this->ht->update(key, value);
+
+    if (updateSucess)
+        this->log->logUpdateSuccess(&this->memberNode->addr, false, transId, key, value);
+    else
+        this->log->logUpdateFail(&this->memberNode->addr, false, transId, key, value);
+
+    return updateSucess;
 }
 
 /**
