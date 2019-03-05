@@ -106,6 +106,7 @@ public:
 	void stabilizationProtocol();
 
 	// user-defined functions
+    void logOperation(Transaction* t, bool isCoordinator, bool success, int transID);
     void handleMessage(Message *msgReceived);
     void handleCreateMessage(Message *msgReceived);
     void handleReadMessage(Message *msgReceived);
@@ -122,6 +123,7 @@ public:
     void deleteTransaction(map<int, Transaction*>::iterator transactionIterator);
 
 	~MP2Node();
+    void sendreply(string key, MessageType mType, bool success, Address* fromaddr, int transID, string content = "");
 };
 
 #endif /* MP2NODE_H_ */

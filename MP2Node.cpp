@@ -243,6 +243,30 @@ void MP2Node::clientDelete(string key) {
     /*
      * Implement this
      */
+    // Create elements that compose the message to send and the transaction
+    int transactionId = g_transID++;
+    Address address = this->memberNode->addr;
+    MessageType msgType = MessageType::DELETE;
+
+    // 1. Message Construction
+    Message *msg = new Message(transactionId, address, msgType, key);
+    string msgData = msg->toString();
+
+    // 2. Find Replicas
+    vector<Node> replicas = this->findNodes(key);
+
+    // 3. Send message to replicas
+    for (auto &replica : replicas) {
+        int currentTimestamp = this->par->getcurrtime();
+
+        Transaction *transaction = new Transaction(transactionId, currentTimestamp, msgType, key);
+        this->transactionsMap->emplace(transactionId, transaction);
+
+        Address *fromAddress = &address;
+        Address *toAddress = replica.getAddress();
+
+        this->emulNet->ENsend(fromAddress, toAddress, msgData);
+    }
 }
 
 /**
@@ -266,6 +290,21 @@ bool MP2Node::createKeyValue(string key, string value, ReplicaType replica, int 
         this->log->logCreateFail(&this->memberNode->addr, false, transId, key, value);
 
     return createSuccess;
+//    bool success = false;
+//    if(transId != -1){
+//        success = this->ht->create(key, value);
+//        if(success)
+//            log->logCreateSuccess(&memberNode->addr, false, transId, key, value);
+//        else
+//            log->logCreateFail(&memberNode->addr, false, transId, key, value);
+//    }else{
+//        string content = this->ht->read(key);
+//        bool exist = (content != "");
+//        if(!exist){
+//            success = this->ht->create(key, value);
+//        }
+//    }
+//    return success;
 }
 
 /**
@@ -328,6 +367,14 @@ bool MP2Node::deletekey(string key, int transId) {
      * Implement this
      */
     // Delete the key from the local hash table
+    bool deleteSuccess = this->ht->deleteKey(key);
+
+    if (deleteSuccess)
+        this->log->logDeleteSuccess(&this->memberNode->addr, false, transId, key);
+    else
+        this->log->logDeleteFail(&this->memberNode->addr, false, transId, key);
+
+    return deleteSuccess;
 }
 
 /**
@@ -374,46 +421,78 @@ void MP2Node::checkMessages() {
 }
 
 void MP2Node::handleMessage(Message *msgReceived) {
-    if (msgReceived->type == MessageType::CREATE)
-        this->handleCreateMessage(msgReceived);
+//    if (msgReceived->type == MessageType::CREATE)
+//        this->handleCreateMessage(msgReceived);
+//
+//    if (msgReceived->type == MessageType::READ)
+//        this->handleReadMessage(msgReceived);
+//
+//    if (msgReceived->type == MessageType::UPDATE)
+//        this->handleUpdateMessage(msgReceived);
+//
+//    if (msgReceived->type == MessageType::DELETE)
+//        this->handleDeleteMessage(msgReceived);
+//
+//    if (msgReceived->type == MessageType::REPLY)
+//        this->handleReplyMessage(msgReceived);
+//
+//    if (msgReceived->type == MessageType::READREPLY)
+//        this->handleReadReplyMessage(msgReceived);
 
-    if (msgReceived->type == MessageType::READ)
-        this->handleReadMessage(msgReceived);
+    Message msg = *msgReceived;
 
-    if (msgReceived->type == MessageType::UPDATE)
-        this->handleUpdateMessage(msgReceived);
-
-    if (msgReceived->type == MessageType::DELETE)
-        this->handleDeleteMessage(msgReceived);
-
-    if (msgReceived->type == MessageType::REPLY)
-        this->handleReplyMessage(msgReceived);
-
-    if (msgReceived->type == MessageType::READREPLY)
-        this->handleReadReplyMessage(msgReceived);
+    switch (msg.type) {
+        case MessageType::CREATE: {
+            this->handleCreateMessage(msgReceived);
+            break;
+        }
+        case MessageType::DELETE: {
+            this->handleDeleteMessage(msgReceived);
+            break;
+        }
+        case MessageType::READ: {
+            this->handleReadMessage(msgReceived);
+            break;
+        }
+        case MessageType::UPDATE: {
+            this->handleUpdateMessage(msgReceived);
+            break;
+        }
+        case MessageType::READREPLY: {
+            this->handleReadReplyMessage(msgReceived);
+            break;
+        }
+        case MessageType::REPLY: {
+            this->handleReplyMessage(msgReceived);
+            break;
+        }
+    }
 }
 
 void MP2Node::handleCreateMessage(Message *msgReceived) {
-    bool createSuccess = this->createKeyValue(msgReceived->key, msgReceived->value, msgReceived->replica, msgReceived->transID);
-    auto *replyMsg = new Message(msgReceived->transID, this->memberNode->addr, MessageType::REPLY, createSuccess);
-    this->emulNet->ENsend(&this->memberNode->addr, &msgReceived->fromAddr, replyMsg->toString());
+    bool createSuccess = this->createKeyValue(msgReceived->key, msgReceived->value, msgReceived->replica,
+                                              msgReceived->transID);
+    Message msg(msgReceived->transID, this->memberNode->addr, MessageType::REPLY, createSuccess);
+//    string data = msg.toString();
+    this->emulNet->ENsend(&this->memberNode->addr, &msgReceived->fromAddr, msg.toString());
 }
 
 void MP2Node::handleReadMessage(Message *msgReceived) {
-    bool readSuccess = !this->readKey(msgReceived->key, msgReceived->transID).empty();
-    auto *replyMsg = new Message(msgReceived->transID, this->memberNode->addr, MessageType::READREPLY, readSuccess);
+    string readContent = this->readKey(msgReceived->key, msgReceived->transID);
+    auto *replyMsg = new Message(msgReceived->transID, this->memberNode->addr, readContent);
     this->emulNet->ENsend(&this->memberNode->addr, &msgReceived->fromAddr, replyMsg->toString());
 }
 
 void MP2Node::handleUpdateMessage(Message *msgReceived) {
-    bool updateSuccess = this->updateKeyValue(msgReceived->key, msgReceived->value, msgReceived->replica, msgReceived->transID);
-    auto *replyMsg = new Message(msgReceived->transID, this->memberNode->addr, MessageType::READREPLY, updateSuccess);
+    bool updateSuccess = this->updateKeyValue(msgReceived->key, msgReceived->value, msgReceived->replica,
+                                              msgReceived->transID);
+    auto *replyMsg = new Message(msgReceived->transID, this->memberNode->addr, MessageType::REPLY, updateSuccess);
     this->emulNet->ENsend(&this->memberNode->addr, &msgReceived->fromAddr, replyMsg->toString());
 }
 
 void MP2Node::handleDeleteMessage(Message *msgReceived) {
     bool deleteSuccess = this->deletekey(msgReceived->key, msgReceived->transID);
-    auto *replyMsg = new Message(msgReceived->transID, this->memberNode->addr, MessageType::READREPLY, deleteSuccess);
+    auto *replyMsg = new Message(msgReceived->transID, this->memberNode->addr, MessageType::REPLY, deleteSuccess);
     this->emulNet->ENsend(&this->memberNode->addr, &msgReceived->fromAddr, replyMsg->toString());
 }
 
@@ -436,13 +515,12 @@ void MP2Node::handleReadReplyMessage(Message *msgReceived) {
     transaction->replyCount++;
     transaction->value = msgReceived->value;
 
-    if (msgReceived->success)
+    if (!msgReceived->value.empty()) // ACA ESTA EL PROBLEMA
         transaction->successCount++;
 }
 
 
 void MP2Node::analyzeQuorumConsistency() {
-
     for (auto transactionIterator = this->transactionsMap->begin();
          transactionIterator != this->transactionsMap->end();
          transactionIterator++) {
@@ -483,6 +561,46 @@ void MP2Node::analyzeQuorumConsistency() {
             this->logOperationCoordinator(transaction, false);
             this->deleteTransaction(transactionIterator);
             continue;
+        }
+    }
+}
+
+void MP2Node::logOperation(Transaction *t, bool isCoordinator, bool success, int transID) {
+    switch (t->msgType) {
+        case CREATE: {
+            if (success) {
+                log->logCreateSuccess(&memberNode->addr, isCoordinator, transID, t->key, t->value);
+            } else {
+                log->logCreateFail(&memberNode->addr, isCoordinator, transID, t->key, t->value);
+            }
+            break;
+        }
+
+        case READ: {
+            if (success) {
+                log->logReadSuccess(&memberNode->addr, isCoordinator, transID, t->key, t->value);
+            } else {
+                log->logReadFail(&memberNode->addr, isCoordinator, transID, t->key);
+            }
+            break;
+        }
+
+        case UPDATE: {
+            if (success) {
+                log->logUpdateSuccess(&memberNode->addr, isCoordinator, transID, t->key, t->value);
+            } else {
+                log->logUpdateFail(&memberNode->addr, isCoordinator, transID, t->key, t->value);
+            }
+            break;
+        }
+
+        case DELETE: {
+            if (success) {
+                log->logDeleteSuccess(&memberNode->addr, isCoordinator, transID, t->key);
+            } else {
+                log->logDeleteFail(&memberNode->addr, isCoordinator, transID, t->key);
+            }
+            break;
         }
     }
 }
