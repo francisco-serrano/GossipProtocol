@@ -1,3 +1,5 @@
+#include <utility>
+
 /**********************************
  * FILE NAME: MP2Node.cpp
  *
@@ -13,7 +15,7 @@ MP2Node::MP2Node(Member *memberNode, Params *par, EmulNet *emulNet, Log *log, Ad
     this->par = par;
     this->emulNet = emulNet;
     this->log = log;
-    ht = new HashTable();
+    this->ht = new HashTable();
     this->memberNode->addr = *address;
     this->transactionsMap = new map<int, Transaction *>;
 }
@@ -30,8 +32,8 @@ Transaction::Transaction(int id, int timestamp, MessageType msgType, string key,
     this->id = id;
     this->timestamp = timestamp;
     this->msgType = msgType;
-    this->key = key;
-    this->value = value;
+    this->key = move(key);
+    this->value = move(value);
 }
 
 /**
@@ -44,9 +46,7 @@ Transaction::Transaction(int id, int timestamp, MessageType msgType, string key,
  * 				3) Calls the Stabilization Protocol
  */
 void MP2Node::updateRing() {
-    /*
-     * Implement this. Parts of it are already implemented
-     */
+
     vector<Node> curMemList;
 
     /*
@@ -67,13 +67,6 @@ void MP2Node::updateRing() {
     // Run stabilization protocol if the hash table size is greater than zero and if there has been a changed in the ring
     bool change = curMemList.size() != this->ring.size();
     this->ring = curMemList;
-
-    for (int i = 0; i < this->ring.size(); i++) {
-        if (curMemList[i].getHashCode() != this->ring[i].getHashCode()) {
-            change = true;
-            break;
-        }
-    }
 
     if (this->ht->currentSize() > 0 && change)
         this->stabilizationProtocol();
@@ -128,12 +121,7 @@ size_t MP2Node::hashFunction(string key) {
  * 				3) Sends a message to the replica
  */
 void MP2Node::clientCreate(string key, string value) {
-    /*
-     * Implement this
-     */
-
-    // Create elements that compose the message to send and the transaction
-    this->clientPerformOperation(MessageType::CREATE, key, value);
+    this->clientPerformOperation(MessageType::CREATE, move(key), move(value));
 }
 
 /**
@@ -146,11 +134,7 @@ void MP2Node::clientCreate(string key, string value) {
  * 				3) Sends a message to the replica
  */
 void MP2Node::clientRead(string key) {
-    /*
-     * Implement this
-     */
-    // Create elements that compose the message to send and the transaction
-    this->clientPerformOperation(MessageType::READ, key);
+    this->clientPerformOperation(MessageType::READ, move(key));
 }
 
 /**
@@ -163,11 +147,7 @@ void MP2Node::clientRead(string key) {
  * 				3) Sends a message to the replica
  */
 void MP2Node::clientUpdate(string key, string value) {
-    /*
-     * Implement this
-     */
-    // Create elements that compose the message to send and the transaction
-    this->clientPerformOperation(MessageType::UPDATE, key, value);
+    this->clientPerformOperation(MessageType::UPDATE, move(key), move(value));
 }
 
 /**
@@ -180,11 +160,7 @@ void MP2Node::clientUpdate(string key, string value) {
  * 				3) Sends a message to the replica
  */
 void MP2Node::clientDelete(string key) {
-    /*
-     * Implement this
-     */
-    // Create elements that compose the message to send and the transaction
-    this->clientPerformOperation(MessageType::DELETE, key);
+    this->clientPerformOperation(MessageType::DELETE, move(key));
 }
 
 void MP2Node::clientPerformOperation(MessageType msgType, string key, string value) {
@@ -223,16 +199,12 @@ void MP2Node::clientPerformOperation(MessageType msgType, string key, string val
  * 			   	2) Return true or false based on success or failure
  */
 bool MP2Node::createKeyValue(string key, string value, ReplicaType replica, int transId) {
-    /*
-     * Implement this
-     */
     // Insert key, value, replicaType into the hash table
     bool createSuccess = this->ht->create(key, value);
 
-    if (createSuccess)
-        this->log->logCreateSuccess(&this->memberNode->addr, false, transId, key, value);
-    else
-        this->log->logCreateFail(&this->memberNode->addr, false, transId, key, value);
+    Transaction *wrapperTransaction = new Transaction(transId, -1, MessageType::CREATE, key, value);
+
+    this->logOperationNonCoordinator(wrapperTransaction, createSuccess);
 
     return createSuccess;
 }
@@ -246,17 +218,13 @@ bool MP2Node::createKeyValue(string key, string value, ReplicaType replica, int 
  * 			    2) Return value
  */
 string MP2Node::readKey(string key, int transId) {
-    /*
-     * Implement this
-     */
     // Read key from local hash table and return value
     string value = this->ht->read(key);
     bool readSuccess = !value.empty();
 
-    if (readSuccess)
-        this->log->logReadSuccess(&this->memberNode->addr, false, transId, key, value);
-    else
-        this->log->logReadFail(&this->memberNode->addr, false, transId, key);
+    Transaction *wrapperTransaction = new Transaction(transId, -1, MessageType::READ, key, value);
+
+    this->logOperationNonCoordinator(wrapperTransaction, readSuccess);
 
     return value;
 }
@@ -270,18 +238,14 @@ string MP2Node::readKey(string key, int transId) {
  * 				2) Return true or false based on success or failure
  */
 bool MP2Node::updateKeyValue(string key, string value, ReplicaType replica, int transId) {
-    /*
-     * Implement this
-     */
     // Update key in local hash table and return true or false
-    bool updateSucess = this->ht->update(key, value);
+    bool updateSuccess = this->ht->update(key, value);
 
-    if (updateSucess)
-        this->log->logUpdateSuccess(&this->memberNode->addr, false, transId, key, value);
-    else
-        this->log->logUpdateFail(&this->memberNode->addr, false, transId, key, value);
+    Transaction *wrapperTransaction = new Transaction(transId, -1, MessageType::UPDATE, key, value);
 
-    return updateSucess;
+    this->logOperationNonCoordinator(wrapperTransaction, updateSuccess);
+
+    return updateSuccess;
 }
 
 /**
@@ -293,16 +257,12 @@ bool MP2Node::updateKeyValue(string key, string value, ReplicaType replica, int 
  * 				2) Return true or false based on success or failure
  */
 bool MP2Node::deletekey(string key, int transId) {
-    /*
-     * Implement this
-     */
     // Delete the key from the local hash table
     bool deleteSuccess = this->ht->deleteKey(key);
 
-    if (deleteSuccess)
-        this->log->logDeleteSuccess(&this->memberNode->addr, false, transId, key);
-    else
-        this->log->logDeleteFail(&this->memberNode->addr, false, transId, key);
+    Transaction *wrapperTransaction = new Transaction(transId, -1, MessageType::DELETE, key);
+
+    this->logOperationNonCoordinator(wrapperTransaction, deleteSuccess);
 
     return deleteSuccess;
 }
@@ -316,9 +276,6 @@ bool MP2Node::deletekey(string key, int transId) {
  * 				2) Handles the messages according to message types
  */
 void MP2Node::checkMessages() {
-    /*
-     * Implement this. Parts of it are already implemented
-     */
     char *data;
     int size;
 
@@ -479,6 +436,20 @@ void MP2Node::logOperationCoordinator(Transaction *transaction, bool operationSu
         this->logDelete(transaction, true, operationSuccess);
 }
 
+void MP2Node::logOperationNonCoordinator(Transaction *transaction, bool operationSuccess) {
+    if (transaction->msgType == MessageType::CREATE)
+        this->logCreate(transaction, false, operationSuccess);
+
+    if (transaction->msgType == MessageType::READ)
+        this->logRead(transaction, false, operationSuccess);
+
+    if (transaction->msgType == MessageType::UPDATE)
+        this->logUpdate(transaction, false, operationSuccess);
+
+    if (transaction->msgType == MessageType::DELETE)
+        this->logDelete(transaction, false, operationSuccess);
+}
+
 void MP2Node::logCreate(Transaction *transaction, bool isCoordinator, bool createOperationSuccess) {
     if (createOperationSuccess) {
         this->log->logCreateSuccess(&this->memberNode->addr, isCoordinator, transaction->getId(), transaction->key,
@@ -589,9 +560,6 @@ int MP2Node::enqueueWrapper(void *env, char *buff, int size) {
  *				Note:- "CORRECT" replicas implies that every key is replicated in its two neighboring nodes in the ring
  */
 void MP2Node::stabilizationProtocol() {
-    /*
-     * Implement this
-     */
     for (const auto &keyValuePair : this->ht->hashTable) {
         string key = keyValuePair.first;
         string value = keyValuePair.second;

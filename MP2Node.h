@@ -19,6 +19,8 @@
 #include "Message.h"
 #include "Queue.h"
 
+using namespace std;
+
 class Transaction {
 private:
     int id;
@@ -139,6 +141,8 @@ public:
     void analyzeQuorumConsistency();
 
     void logOperationCoordinator(Transaction *transaction, bool operationSuccess);
+
+    void logOperationNonCoordinator(Transaction *transaction, bool operationSuccess);
 
     void logCreate(Transaction *transaction, bool isCoordinator, bool createOperationSuccess);
 
