@@ -21,17 +21,20 @@
 
 class Transaction {
 private:
-	int id;
-	int timestamp;
+    int id;
+    int timestamp;
 public:
-    Transaction(int id, int timestamp, MessageType msgType, string key, string value="");
+    Transaction(int id, int timestamp, MessageType msgType, string key, string value = "");
+
     MessageType msgType;
     string key;
     string value;
     int replyCount;
     int successCount;
-    int getId() {return id;};
-    int getTime(){ return timestamp;};
+
+    int getId() { return id; };
+
+    int getTime() { return timestamp; };
 };
 
 /**
@@ -46,84 +49,108 @@ public:
  */
 class MP2Node {
 private:
-	// Vector holding the next two neighbors in the ring who have my replicas
-	vector<Node> hasMyReplicas;
-	// Vector holding the previous two neighbors in the ring whose replicas I have
-	vector<Node> haveReplicasOf;
-	// Ring
-	vector<Node> ring;
-	// Hash Table
-	HashTable * ht;
-	// Member representing this member
-	Member *memberNode;
-	// Params object
-	Params *par;
-	// Object of EmulNet
-	EmulNet * emulNet;
-	// Object of Log
-	Log * log;
-	// Transactions Map
-	map<int, Transaction*> *transactionsMap;
+    // Vector holding the next two neighbors in the ring who have my replicas
+    vector<Node> hasMyReplicas;
+    // Vector holding the previous two neighbors in the ring whose replicas I have
+    vector<Node> haveReplicasOf;
+    // Ring
+    vector<Node> ring;
+    // Hash Table
+    HashTable *ht;
+    // Member representing this member
+    Member *memberNode;
+    // Params object
+    Params *par;
+    // Object of EmulNet
+    EmulNet *emulNet;
+    // Object of Log
+    Log *log;
+    // Transactions Map
+    map<int, Transaction *> *transactionsMap;
 
 public:
-	MP2Node(Member *memberNode, Params *par, EmulNet *emulNet, Log *log, Address *addressOfMember);
-	Member * getMemberNode() {
-		return this->memberNode;
-	}
+    MP2Node(Member *memberNode, Params *par, EmulNet *emulNet, Log *log, Address *addressOfMember);
 
-	// ring functionalities
-	void updateRing();
-	vector<Node> getMembershipList();
-	size_t hashFunction(string key);
-	void findNeighbors();
+    Member *getMemberNode() {
+        return this->memberNode;
+    }
 
-	// client side CRUD APIs
-	void clientCreate(string key, string value);
-	void clientRead(string key);
-	void clientUpdate(string key, string value);
-	void clientDelete(string key);
+    // ring functionalities
+    void updateRing();
 
-	// receive messages from Emulnet
-	bool recvLoop();
-	static int enqueueWrapper(void *env, char *buff, int size);
+    vector<Node> getMembershipList();
 
-	// handle messages from receiving queue
-	void checkMessages();
+    size_t hashFunction(string key);
 
-	// coordinator dispatches messages to corresponding nodes
-	void dispatchMessages(Message message);
+    void findNeighbors();
 
-	// find the addresses of nodes that are responsible for a key
-	vector<Node> findNodes(string key);
+    // client side CRUD APIs
+    void clientCreate(string key, string value);
 
-	// server
-	bool createKeyValue(string key, string value, ReplicaType replica, int transId);
-	string readKey(string key, int transId);
-	bool updateKeyValue(string key, string value, ReplicaType replica, int transId);
-	bool deletekey(string key, int transId);
+    void clientRead(string key);
 
-	// stabilization protocol - handle multiple failures
-	void stabilizationProtocol();
+    void clientUpdate(string key, string value);
 
-	// user-defined functions
-    void logOperation(Transaction* t, bool isCoordinator, bool success, int transID);
+    void clientDelete(string key);
+
+    // receive messages from Emulnet
+    bool recvLoop();
+
+    static int enqueueWrapper(void *env, char *buff, int size);
+
+    // handle messages from receiving queue
+    void checkMessages();
+
+    // coordinator dispatches messages to corresponding nodes
+    void dispatchMessages(Message message);
+
+    // find the addresses of nodes that are responsible for a key
+    vector<Node> findNodes(string key);
+
+    // server
+    bool createKeyValue(string key, string value, ReplicaType replica, int transId);
+
+    string readKey(string key, int transId);
+
+    bool updateKeyValue(string key, string value, ReplicaType replica, int transId);
+
+    bool deletekey(string key, int transId);
+
+    // stabilization protocol - handle multiple failures
+    void stabilizationProtocol();
+
+    // user-defined functions
+    void clientPerformOperation(MessageType msgType, string key, string value = "");
+
     void handleMessage(Message *msgReceived);
-    void handleCreateMessage(Message *msgReceived);
-    void handleReadMessage(Message *msgReceived);
-    void handleUpdateMessage(Message *msgReceived);
-    void handleDeleteMessage(Message *msgReceived);
-    void handleReplyMessage(Message *msgReceived);
-    void handleReadReplyMessage(Message *msgReceived);
-    void analyzeQuorumConsistency();
-    void logOperationCoordinator(Transaction *transaction, bool operationSuccess);
-    void logCreate(Transaction *transaction, bool isCoordinator, bool createOperationSuccess);
-    void logRead(Transaction *transaction, bool isCoordinator, bool readOperationSuccess);
-    void logUpdate(Transaction *transaction, bool isCoordinator, bool updateOperationSuccess);
-    void logDelete(Transaction *transaction, bool isCoordinator, bool deleteOperationSuccess);
-    void deleteTransaction(map<int, Transaction*>::iterator transactionIterator);
 
-	~MP2Node();
-    void sendreply(string key, MessageType mType, bool success, Address* fromaddr, int transID, string content = "");
+    void handleCreateMessage(Message *msgReceived);
+
+    void handleReadMessage(Message *msgReceived);
+
+    void handleUpdateMessage(Message *msgReceived);
+
+    void handleDeleteMessage(Message *msgReceived);
+
+    void handleReplyMessage(Message *msgReceived);
+
+    void handleReadReplyMessage(Message *msgReceived);
+
+    void analyzeQuorumConsistency();
+
+    void logOperationCoordinator(Transaction *transaction, bool operationSuccess);
+
+    void logCreate(Transaction *transaction, bool isCoordinator, bool createOperationSuccess);
+
+    void logRead(Transaction *transaction, bool isCoordinator, bool readOperationSuccess);
+
+    void logUpdate(Transaction *transaction, bool isCoordinator, bool updateOperationSuccess);
+
+    void logDelete(Transaction *transaction, bool isCoordinator, bool deleteOperationSuccess);
+
+    void deleteTransaction(map<int, Transaction *>::iterator transactionIterator);
+
+    ~MP2Node();
 };
 
 #endif /* MP2NODE_H_ */
